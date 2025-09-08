@@ -1,41 +1,391 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AKO groupe | formulaire</title>
+    <title>AKO Groupe | Formulaire Employé</title>
+    <!-- Tailwind CSS avec DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: url('https://i.pinimg.com/1200x/13/26/14/1326149a590a3765c73c0847d10929cc.jpg');
+            background-repeat: no-repeat; 
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6df163, #65c3f9);
+            border-radius: 1rem;
+        }
+        .logo-text {
+            font-size: 5rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .form-step {
+            display: none;
+        }
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .step-indicator {
+            transition: all 0.3s ease;
+        }
+        /* Animation de succès */
+        @keyframes checkmark {
+            0% { stroke-dashoffset: 50px; opacity: 0; }
+            50% { opacity: 1; }
+            100% { stroke-dashoffset: 0; opacity: 1; }
+        }
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+        }
+        .success-checkmark .check-icon {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            border-radius: 50%;
+            box-sizing: content-box;
+            border: 4px solid #4CAF50;
+        }
+        .success-checkmark .check-icon::before {
+            top: 3px;
+            left: -2px;
+            transform: rotate(45deg);
+            border-radius: 100px 0 0 100px;
+        }
+        .success-checkmark .check-icon::after {
+            top: 0;
+            left: 30px;
+            transform: rotate(-45deg);
+            border-radius: 0 100px 100px 0;
+            animation: rotate 0.5s ease-in-out;
+        }
+        .success-checkmark .check-icon .icon-line {
+            height: 5px;
+            background-color: #4CAF50;
+            display: block;
+            border-radius: 2px;
+            position: absolute;
+            z-index: 10;
+        }
+        .success-checkmark .check-icon .icon-line.line-tip {
+            top: 46px;
+            left: 14px;
+            width: 25px;
+            transform: rotate(45deg);
+            animation: icon-line-tip 0.5s ease-in-out;
+        }
+        .success-checkmark .check-icon .icon-line.line-long {
+            top: 38px;
+            right: 8px;
+            width: 47px;
+            transform: rotate(-45deg);
+            animation: icon-line-long 0.5s ease-in-out;
+        }
+        .success-checkmark .check-icon .icon-circle {
+            top: -4px;
+            left: -4px;
+            z-index: 10;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            position: absolute;
+            box-sizing: content-box;
+            border: 4px solid rgba(76, 175, 80, 0.5);
+        }
+        .success-checkmark .check-icon .icon-fix {
+            top: 8px;
+            width: 5px;
+            left: 26px;
+            z-index: 1;
+            height: 85px;
+            position: absolute;
+            transform: rotate(-45deg);
+            background-color: #ffffff;
+        }
+        @keyframes icon-line-tip {
+            0% { width: 0; left: 1px; top: 19px; }
+            54% { width: 0; left: 1px; top: 19px; }
+            70% { width: 50px; left: -8px; top: 37px; }
+            84% { width: 17px; left: 21px; top: 48px; }
+            100% { width: 25px; left: 14px; top: 45px; }
+        }
+        @keyframes icon-line-long {
+            0% { width: 0; right: 46px; top: 54px; }
+            65% { width: 0; right: 46px; top: 54px; }
+            84% { width: 55px; right: 0px; top: 35px; }
+            100% { width: 47px; right: 8px; top: 38px; }
+        }
+    </style>
 </head>
-<body>
-
-    <!-- ========= formulaire employe non prenom adresse mail phone ========= -->
-        <div class="container mx-auto px-4 py-16 flex flex-col items-center">
-            <h1 class="text-4xl font-bold text-center">Formulaire employe non prenom</h1>
-            <form class="w-full max-w-md" name="AKO"  method="POST" data-netlify="true">
-               
-                <div class="flex flex-col gap-4">
-                    <div>
-                        <label for="name" class="text-gray-700">Nom</label>
-                        <input type="text" id="name" name="name" placeholder="Nom" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="email" class="text-gray-700">Email</label>
-                        <input type="email" id="email" name="email" placeholder="Email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="phone" class="text-gray-700">Téléphone</label>
-                        <input type="tel" id="phone" name="phone" placeholder="Téléphone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="message" class="text-gray-700">Message</label>
-                        <textarea id="message" name="message" placeholder="Message" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"></textarea>
-                    </div>
-                    <div>
-                        <button type="submit" class="w-full mt-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Envoyer</button>
-                    </div>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-8 relative"> 
+    <div class="fixed top-0 left-0 w-full h-full z-1 flex items-center justify-center p-4 md:p-8 backdrop-blur-lg"> 
+        <div class="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-12">
+            <!-- Logo AKO pour les grands écrans -->
+            <div class="hidden lg:flex flex-1 logo-container h-[500px]">
+                <div class="text-center p-8">
+                    <div class="logo-text">AKO</div>
+                    <p class="text-white text-xl mt-4 font-light">Votre partenaire pour l'emploi</p>
                 </div>
-            </form>
+            </div>
+            
+            <!-- Formulaire -->
+            <div class="form-container p-6 md:p-8 w-full lg:max-w-md">
+                <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">Formulaire Employé</h1>
+                <p class="text-gray-600 text-center mb-8">Rejoignez l'équipe AKO</p>
+
+                <form name="AKO" method="POST" data-netlify="true" class="flex flex-col gap-5" id="employeeForm">
+                    <!-- Étape 1 -->
+                    <div class="form-step active" id="step1">
+                        <div class="form-control">
+                            <label for="name" class="label">
+                                <span class="label-text">Nom complet</span>
+                            </label>
+                            <input type="text" id="name" name="name" placeholder="Votre nom" required
+                                   class="input input-bordered w-full focus:input-primary">
+                        </div>
+
+                        <div class="form-control">
+                            <label for="email" class="label">
+                                <span class="label-text">Adresse email</span>
+                            </label>
+                            <input type="email" id="email" name="email" placeholder="exemple@ako.com" required
+                                   class="input input-bordered w-full focus:input-primary">
+                        </div>
+                        
+                        <div class="flex justify-end mt-6">
+                            <button type="button" class="next-btn btn btn-primary">
+                                Suivant <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Étape 2 -->
+                    <div class="form-step" id="step2">
+                        <div class="form-control">
+                            <label for="phone" class="label">
+                                <span class="label-text">Téléphone</span>
+                            </label>
+                            <input type="tel" id="phone" name="phone" placeholder="+242 000 000 000" required
+                                   class="input input-bordered w-full focus:input-primary">
+                        </div>
+
+                        <div class="form-control">
+                            <label for="department" class="label">
+                                <span class="label-text">Département</span>
+                            </label>
+                            <select id="department" name="department" required
+                                    class="select select-bordered w-full focus:select-primary">
+                                <option value="">Sélectionnez un département</option>
+                                <option value="rh">Ressources Humaines</option>
+                                <option value="tech">Technologie</option>
+                                <option value="finance">Finance</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="production">Production</option>
+                                <option value="commercial">Commercial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex justify-between mt-6">
+                            <button type="button" class="prev-btn btn btn-outline btn-neutral">
+                                <i class="fas fa-arrow-left mr-2"></i> Précédent
+                            </button>
+                            <button type="button" class="next-btn btn btn-primary">
+                                Suivant <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Étape 3 -->
+                    <div class="form-step" id="step3">
+                        <div class="form-control">
+                            <label for="position" class="label">
+                                <span class="label-text">Poste</span>
+                            </label>
+                            <input type="text" id="position" name="position" placeholder="Votre poste" required
+                                   class="input input-bordered w-full focus:input-primary">
+                        </div>
+
+                        <div class="form-control">
+                            <label for="message" class="label">
+                                <span class="label-text">Message</span>
+                            </label>
+                            <textarea id="message" name="message" placeholder="Votre message..." rows="4" required
+                                      class="textarea textarea-bordered w-full focus:textarea-primary"></textarea>
+                        </div>
+                        
+                        <div class="flex justify-between mt-6">
+                            <button type="button" class="prev-btn btn btn-outline btn-neutral">
+                                <i class="fas fa-arrow-left mr-2"></i> Précédent
+                            </button>
+                            <button type="submit" class="btn btn-success" id="submitBtn">
+                                <i class="fas fa-paper-plane mr-2"></i> Envoyer
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Indicateur de progression -->
+                <div class="flex justify-center mt-8 space-x-3">
+                    <div class="h-3 w-3 rounded-full step-indicator bg-primary" data-step="1"></div>
+                    <div class="h-3 w-3 rounded-full step-indicator bg-gray-300" data-step="2"></div>
+                    <div class="h-3 w-3 rounded-full step-indicator bg-gray-300" data-step="3"></div>
+                </div>
+            </div>
         </div>
-    
+    </div>
+
+    <!-- Modale de succès -->
+    <div id="successModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="modal-box bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full mx-4">
+            <div class="success-checkmark">
+                <div class="check-icon">
+                    <span class="icon-line line-tip"></span>
+                    <span class="icon-line line-long"></span>
+                    <div class="icon-circle"></div>
+                    <div class="icon-fix"></div>
+                </div>
+            </div>
+            <h3 class="font-bold text-2xl text-center text-gray-800 mt-6">Formulaire soumis avec succès!</h3>
+            <p class="py-4 text-center text-gray-600">Merci pour votre inscription. Nous vous contacterons bientôt.</p>
+            <div class="modal-action justify-center">
+                <button id="closeModal" class="btn btn-primary">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const formSteps = document.querySelectorAll('.form-step');
+            const stepIndicators = document.querySelectorAll('.step-indicator');
+            const form = document.getElementById('employeeForm');
+            const successModal = document.getElementById('successModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            let currentStep = 0;
+            
+            // Afficher la première étape
+            showStep(currentStep);
+            
+            // Gestion des boutons Suivant
+            document.querySelectorAll('.next-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Validation basique
+                    const currentStepElem = formSteps[currentStep];
+                    const inputs = currentStepElem.querySelectorAll('input, select, textarea');
+                    let isValid = true;
+                    
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.classList.add('input-error');
+                            // Ajouter un message d'erreur
+                            if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-message')) {
+                                const errorMsg = document.createElement('p');
+                                errorMsg.classList.add('error-message', 'text-error', 'text-sm', 'mt-1');
+                                errorMsg.textContent = 'Ce champ est obligatoire';
+                                input.parentNode.appendChild(errorMsg);
+                            }
+                        } else {
+                            input.classList.remove('input-error');
+                            // Supprimer le message d'erreur s'il existe
+                            const errorMsg = input.parentNode.querySelector('.error-message');
+                            if (errorMsg) {
+                                errorMsg.remove();
+                            }
+                        }
+                    });
+                    
+                    if (isValid) {
+                        currentStep++;
+                        showStep(currentStep);
+                    }
+                });
+            });
+            
+            // Gestion des boutons Précédent
+            document.querySelectorAll('.prev-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    currentStep--;
+                    showStep(currentStep);
+                });
+            });
+            
+            function showStep(stepIndex) {
+                // Masquer toutes les étapes
+                formSteps.forEach(step => {
+                    step.classList.remove('active');
+                });
+                
+                // Afficher l'étape actuelle
+                formSteps[stepIndex].classList.add('active');
+                
+                // Mettre à jour les indicateurs
+                stepIndicators.forEach((indicator, index) => {
+                    if (index === stepIndex) {
+                        indicator.classList.remove('bg-gray-300', 'bg-primary');
+                        indicator.classList.add('bg-primary');
+                    } else if (index < stepIndex) {
+                        indicator.classList.remove('bg-gray-300', 'bg-primary');
+                        indicator.classList.add('bg-primary');
+                    } else {
+                        indicator.classList.remove('bg-primary');
+                        indicator.classList.add('bg-gray-300');
+                    }
+                });
+            }
+            
+            // Gestion de la soumission du formulaire
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simulation d'envoi réussi
+                setTimeout(function() {
+                    // Afficher la modale de succès
+                    successModal.classList.remove('hidden');
+                    
+                    // Réinitialiser le formulaire
+                    form.reset();
+                    currentStep = 0;
+                    showStep(currentStep);
+                }, 1000);
+            });
+            
+            // Fermer la modale
+            closeModalBtn.addEventListener('click', function() {
+                successModal.classList.add('hidden');
+            });
+            
+            // Fermer la modale en cliquant à l'extérieur
+            successModal.addEventListener('click', function(e) {
+                if (e.target === successModal) {
+                    successModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
